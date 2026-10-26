@@ -18,7 +18,8 @@ public class Main {
             System.out.println("3. View overall progress");
             System.out.println("4. View learning dashboard");
             System.out.println("5. Add a learning topic");
-            System.out.println("6. Exit");
+            System.out.println("6. Delete a learning topic");
+            System.out.println("7. Exit");
             System.out.print("Enter your choice: ");
 
             while (!scanner.hasNextInt()) {
@@ -28,7 +29,7 @@ public class Main {
             }
 
             choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline
+            scanner.nextLine();
 
             switch (choice) {
 
@@ -56,7 +57,7 @@ public class Main {
                     System.out.print("Enter progress percentage (0-100): ");
 
                     while (!scanner.hasNextInt()) {
-                        System.out.println("Please enter a number from 0 to 100.");
+                        System.out.println("Please enter a number.");
                         scanner.next();
                         System.out.print("Enter progress percentage (0-100): ");
                     }
@@ -86,16 +87,46 @@ public class Main {
                     break;
 
                 case 6:
+                    dao.displayAllTopics();
+
+                    System.out.print(
+                        "\nEnter the ID of the topic to delete: "
+                    );
+
+                    while (!scanner.hasNextInt()) {
+                        System.out.println("Please enter a valid topic ID.");
+                        scanner.next();
+                        System.out.print("Enter topic ID: ");
+                    }
+
+                    int deleteId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    System.out.print(
+                        "Are you sure you want to delete this topic? (yes/no): "
+                    );
+
+                    String confirmation =
+                        scanner.nextLine().trim();
+
+                    if (confirmation.equalsIgnoreCase("yes")) {
+                        dao.deleteLearningTopic(deleteId);
+                    } else {
+                        System.out.println("Deletion cancelled.");
+                    }
+                    break;
+
+                case 7:
                     System.out.println("Thank you for using CareerPilotAI!");
                     break;
 
                 default:
                     System.out.println(
-                        "Invalid choice. Please select 1 to 6."
+                        "Invalid choice. Please select 1 to 7."
                     );
             }
 
-        } while (choice != 6);
+        } while (choice != 7);
 
         scanner.close();
     }

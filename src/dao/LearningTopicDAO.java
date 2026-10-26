@@ -258,4 +258,36 @@ public class LearningTopicDAO {
             e.printStackTrace();
         }
     }
+
+    // Delete a learning topic by ID
+    public void deleteLearningTopic(int topicId) {
+
+        if (topicId <= 0) {
+            System.out.println("Topic ID must be a positive number.");
+            return;
+        }
+
+        String sql = "DELETE FROM learning_topics WHERE id = ?";
+
+        try (
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement =
+                connection.prepareStatement(sql)
+        ) {
+
+            statement.setInt(1, topicId);
+
+            int rowsDeleted = statement.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Learning topic deleted successfully!");
+            } else {
+                System.out.println("No topic found with ID " + topicId);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Unable to delete learning topic.");
+            e.printStackTrace();
+        }
+    }
 }
