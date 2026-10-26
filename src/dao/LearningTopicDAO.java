@@ -221,4 +221,41 @@ public class LearningTopicDAO {
             e.printStackTrace();
         }
     }
+
+    // Add a new learning topic
+    public void addLearningTopic(String topicName, String category) {
+
+        if (topicName == null || topicName.trim().isEmpty()) {
+            System.out.println("Topic name cannot be empty.");
+            return;
+        }
+
+        if (category == null || category.trim().isEmpty()) {
+            System.out.println("Category cannot be empty.");
+            return;
+        }
+
+        String sql = "INSERT INTO learning_topics "
+                   + "(topic_name, category, status, progress_percentage) "
+                   + "VALUES (?, ?, 'Not Started', 0)";
+
+        try (
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+
+            statement.setString(1, topicName.trim());
+            statement.setString(2, category.trim());
+
+            int rowsInserted = statement.executeUpdate();
+
+            if (rowsInserted > 0) {
+                System.out.println("Learning topic added successfully!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Unable to add learning topic.");
+            e.printStackTrace();
+        }
+    }
 }

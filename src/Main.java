@@ -9,7 +9,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         LearningTopicDAO dao = new LearningTopicDAO();
 
-        int choice;
+        int choice = 0;
 
         do {
             System.out.println("\n===== CareerPilotAI =====");
@@ -17,7 +17,8 @@ public class Main {
             System.out.println("2. Update topic progress");
             System.out.println("3. View overall progress");
             System.out.println("4. View learning dashboard");
-            System.out.println("5. Exit");
+            System.out.println("5. Add a learning topic");
+            System.out.println("6. Exit");
             System.out.print("Enter your choice: ");
 
             while (!scanner.hasNextInt()) {
@@ -27,6 +28,7 @@ public class Main {
             }
 
             choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline
 
             switch (choice) {
 
@@ -44,11 +46,12 @@ public class Main {
                     }
 
                     int topicId = scanner.nextInt();
+                    scanner.nextLine();
 
                     System.out.print(
-                        "Enter status (NotStarted, InProgress, Completed): "
+                        "Enter status (Not Started, In Progress, Completed): "
                     );
-                    String status = scanner.next();
+                    String status = scanner.nextLine().trim();
 
                     System.out.print("Enter progress percentage (0-100): ");
 
@@ -59,6 +62,7 @@ public class Main {
                     }
 
                     int progress = scanner.nextInt();
+                    scanner.nextLine();
 
                     dao.updateTopicProgress(topicId, status, progress);
                     break;
@@ -72,16 +76,26 @@ public class Main {
                     break;
 
                 case 5:
+                    System.out.print("Enter topic name: ");
+                    String topicName = scanner.nextLine().trim();
+
+                    System.out.print("Enter category: ");
+                    String category = scanner.nextLine().trim();
+
+                    dao.addLearningTopic(topicName, category);
+                    break;
+
+                case 6:
                     System.out.println("Thank you for using CareerPilotAI!");
                     break;
 
                 default:
                     System.out.println(
-                        "Invalid choice. Please select 1 to 5."
+                        "Invalid choice. Please select 1 to 6."
                     );
             }
 
-        } while (choice != 5);
+        } while (choice != 6);
 
         scanner.close();
     }
