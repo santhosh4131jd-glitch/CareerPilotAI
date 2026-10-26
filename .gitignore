@@ -1,0 +1,16 @@
+# Java compiled files
+*.class
+bin/
+target/
+
+# Eclipse workspace settings
+.metadata/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Local secrets
+.env
+.env.*
+!.env.example
