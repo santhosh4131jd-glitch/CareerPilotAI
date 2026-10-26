@@ -19,7 +19,8 @@ public class Main {
             System.out.println("4. View learning dashboard");
             System.out.println("5. Add a learning topic");
             System.out.println("6. Delete a learning topic");
-            System.out.println("7. Exit");
+            System.out.println("7. Search learning topics");
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
 
             while (!scanner.hasNextInt()) {
@@ -59,7 +60,9 @@ public class Main {
                     while (!scanner.hasNextInt()) {
                         System.out.println("Please enter a number.");
                         scanner.next();
-                        System.out.print("Enter progress percentage (0-100): ");
+                        System.out.print(
+                            "Enter progress percentage (0-100): "
+                        );
                     }
 
                     int progress = scanner.nextInt();
@@ -106,8 +109,7 @@ public class Main {
                         "Are you sure you want to delete this topic? (yes/no): "
                     );
 
-                    String confirmation =
-                        scanner.nextLine().trim();
+                    String confirmation = scanner.nextLine().trim();
 
                     if (confirmation.equalsIgnoreCase("yes")) {
                         dao.deleteLearningTopic(deleteId);
@@ -117,16 +119,25 @@ public class Main {
                     break;
 
                 case 7:
-                    System.out.println("Thank you for using CareerPilotAI!");
+                    System.out.print("Enter topic name to search: ");
+                    String searchName = scanner.nextLine().trim();
+
+                    dao.searchLearningTopics(searchName);
+                    break;
+
+                case 8:
+                    System.out.println(
+                        "Thank you for using CareerPilotAI!"
+                    );
                     break;
 
                 default:
                     System.out.println(
-                        "Invalid choice. Please select 1 to 7."
+                        "Invalid choice. Please select 1 to 8."
                     );
             }
 
-        } while (choice != 7);
+        } while (choice != 8);
 
         scanner.close();
     }

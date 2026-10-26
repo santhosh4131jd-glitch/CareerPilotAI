@@ -290,4 +290,54 @@ public class LearningTopicDAO {
             e.printStackTrace();
         }
     }
+
+    // Search learning topics by topic name
+    public void searchLearningTopics(String searchName) {
+
+        if (searchName == null || searchName.trim().isEmpty()) {
+            System.out.println("Search name cannot be empty.");
+            return;
+        }
+
+        String sql = "SELECT id, topic_name, category, status, "
+                   + "progress_percentage FROM learning_topics "
+                   + "WHERE topic_name LIKE ? ORDER BY id";
+
+        try (
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement statement =
+                connection.prepareStatement(sql)
+        ) {
+
+            statement.setString(1, "%" + searchName.trim() + "%");
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                boolean found = false;
+
+                System.out.println("\n===== Search Results =====");
+
+                while (resultSet.next()) {
+                    found = true;
+
+                    System.out.println(
+                        resultSet.getInt("id") + " | "
+                        + resultSet.getString("topic_name") + " | "
+                        + resultSet.getString("category") + " | "
+                        + resultSet.getString("status") + " | "
+                        + resultSet.getInt("progress_percentage") + "%"
+                    );
+                }
+
+                if (!found) {
+                    System.out.println("No matching learning topics found.");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Unable to search learning topics.");
+            e.printStackTrace();
+        }
+    }
+
 }
