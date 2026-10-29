@@ -1,0 +1,1444 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerPilotAI | Learning Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .header {
+            background: #172554;
+            color: white;
+            padding: 25px 6%;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #cbd5e1;
+            margin-bottom: 0;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome p {
+            color: #64748b;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card, .section {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 3px 12px #0f172a08;
+        }
+
+        .stat-card p {
+            color: #64748b;
+            margin: 0 0 12px;
+        }
+
+        .stat-card h2 {
+            margin: 0;
+            color: #2563eb;
+            font-size: 30px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .section-header h2 {
+            margin: 0;
+        }
+
+        .form-grid, .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            color: #475569;
+            margin-bottom: 7px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 14px;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #bfdbfe;
+            border-color: #2563eb;
+        }
+
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            background: #2563eb;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.88;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .secondary {
+            background: #475569;
+        }
+
+        .edit-button {
+            background: #0f766e;
+        }
+
+        .delete-button {
+            background: #dc2626;
+        }
+
+        .cancel-button {
+            background: #64748b;
+            margin-left: 8px;
+        }
+
+        .message {
+            margin: 14px 0;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .success {
+            color: #15803d;
+        }
+
+        .error {
+            color: #dc2626;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            background: #f8fafc;
+        }
+
+        .status {
+            display: inline-block;
+            border-radius: 20px;
+            padding: 6px 9px;
+            font-size: 12px;
+            background: #f1f5f9;
+            white-space: nowrap;
+        }
+
+        .status.in-progress {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status.completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .progress-track {
+            height: 8px;
+            width: 100px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #2563eb;
+            border-radius: 10px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        .actions button {
+            padding: 8px 10px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #64748b;
+            padding: 25px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0 12px;
+                margin-top: 18px;
+            }
+
+            .section, .stat-card {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 22px 18px;
+            }
+        }
+		#streak-section {
+		    margin: 30px 0;
+		    padding: 24px;
+		    background: white;
+		    border: 1px solid #e2e8f0;
+		    border-radius: 12px;
+		}
+
+		.stats-container {
+		    display: grid;
+		    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+		    gap: 16px;
+		    margin: 16px 0;
+		}
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>CareerPilotAI 🚀</h1>
+    <p>Your personal placement preparation dashboard</p>
+</header>
+
+<main class="container">
+
+    <section class="welcome">
+        <h2>Learning Dashboard 👋</h2>
+        <p>Track your Java, DSA, database, AI/ML, and placement preparation.</p>
+    </section>
+
+    <section class="stats">
+        <div class="stat-card">
+            <p>Total Topics</p>
+            <h2 id="totalTopics">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Not Started</p>
+            <h2 id="notStartedTopics">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>In Progress</p>
+            <h2 id="inProgressTopics">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Completed</p>
+            <h2 id="completedTopics">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <p>Average Progress</p>
+            <h2 id="averageProgress">0%</h2>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <h2 id="formHeading">Add a Learning Topic</h2>
+        </div>
+
+        <form id="topicForm">
+            <input type="hidden" id="editingId">
+
+            <div class="form-grid">
+                <div>
+                    <label for="topicName">Topic Name</label>
+                    <input id="topicName" type="text"
+                           placeholder="e.g. Dynamic Programming" required>
+                </div>
+
+                <div>
+                    <label for="category">Category</label>
+                    <select id="category" required>
+                        <option value="">Select Category</option>
+                        <option value="Java">Java</option>
+                        <option value="DSA">DSA</option>
+                        <option value="Web Development">Web Development</option>
+                        <option value="Database">Database</option>
+                        <option value="AI/ML">AI/ML</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="status">Status</label>
+                    <select id="status" required>
+                        <option value="Not Started">Not Started</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="progress">Progress (%)</label>
+                    <input id="progress" type="number"
+                           min="0" max="100" step="1" value="0" required>
+                </div>
+            </div>
+
+            <button type="submit" id="saveButton">+ Add Topic</button>
+            <button type="button" id="cancelButton"
+                    class="cancel-button" hidden>Cancel Edit</button>
+
+            <p id="formMessage" class="message" role="status"></p>
+        </form>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <h2>My Learning Topics</h2>
+            <button type="button" class="secondary" id="refreshButton">
+                Refresh Topics ↻
+            </button>
+        </div>
+
+        <div class="filters">
+            <div>
+                <label for="searchInput">Search Topics</label>
+                <input id="searchInput" type="search"
+                       placeholder="Search by topic name...">
+            </div>
+
+            <div>
+                <label for="categoryFilter">Filter by Category</label>
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="Java">Java</option>
+                    <option value="DSA">DSA</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Database">Database</option>
+                    <option value="AI/ML">AI/ML</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="statusFilter">Filter by Status</label>
+                <select id="statusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="Not Started">Not Started</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+        </div>
+
+        <p id="tableMessage" class="message">
+            Connecting to CareerPilotAI...
+        </p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Topic</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Progress</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="topicTable"></tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    CareerPilotAI · Learn consistently. Prepare confidently.
+</footer>
+
+<script>
+    const API_URL = "http://localhost:8080/api/topics";
+
+    let allTopics = [];
+
+    const topicForm = document.getElementById("topicForm");
+    const topicNameInput = document.getElementById("topicName");
+    const categoryInput = document.getElementById("category");
+    const statusInput = document.getElementById("status");
+    const progressInput = document.getElementById("progress");
+    const editingIdInput = document.getElementById("editingId");
+    const saveButton = document.getElementById("saveButton");
+    const cancelButton = document.getElementById("cancelButton");
+    const formMessage = document.getElementById("formMessage");
+    const tableMessage = document.getElementById("tableMessage");
+    const topicTable = document.getElementById("topicTable");
+
+    function showFormMessage(text, type) {
+        formMessage.textContent = text;
+        formMessage.className = "message " + (type || "");
+    }
+
+    function getValidProgress(value) {
+        if (value.trim() === "") return null;
+
+        const number = Number(value);
+
+        if (!Number.isInteger(number) || number < 0 || number > 100) {
+            return null;
+        }
+
+        return number;
+    }
+
+    async function loadTopics() {
+        tableMessage.textContent = "Loading topics...";
+        topicTable.replaceChildren();
+
+        try {
+            const response = await fetch(API_URL);
+
+            if (!response.ok) {
+                throw new Error("API returned HTTP " + response.status);
+            }
+
+            const data = await response.json();
+
+            if (!Array.isArray(data)) {
+                throw new Error("Unexpected API response.");
+            }
+
+            allTopics = data;
+            updateStatistics();
+            renderTopics();
+
+            tableMessage.textContent =
+                "Successfully loaded " + allTopics.length + " topics.";
+
+        } catch (error) {
+            console.error("Loading topics failed:", error);
+            tableMessage.textContent =
+                "Could not load topics. Make sure Spring Boot is running on port 8080 and the API is available.";
+            tableMessage.className = "message error";
+        }
+    }
+
+    function updateStatistics() {
+        const total = allTopics.length;
+
+        const notStarted = allTopics.filter(
+            topic => topic.status === "Not Started"
+        ).length;
+
+        const inProgress = allTopics.filter(
+            topic => topic.status === "In Progress"
+        ).length;
+
+        const completed = allTopics.filter(
+            topic => topic.status === "Completed"
+        ).length;
+
+        const average = total === 0 ? 0 : Math.round(
+            allTopics.reduce(
+                (sum, topic) => sum + (Number(topic.progressPercentage) || 0),
+                0
+            ) / total
+        );
+
+        document.getElementById("totalTopics").textContent = total;
+        document.getElementById("notStartedTopics").textContent = notStarted;
+        document.getElementById("inProgressTopics").textContent = inProgress;
+        document.getElementById("completedTopics").textContent = completed;
+        document.getElementById("averageProgress").textContent = average + "%";
+    }
+
+    function renderTopics() {
+        topicTable.replaceChildren();
+
+        const searchText = document.getElementById("searchInput")
+            .value.trim().toLowerCase();
+
+        const selectedCategory =
+            document.getElementById("categoryFilter").value;
+
+        const selectedStatus =
+            document.getElementById("statusFilter").value;
+
+        const filteredTopics = allTopics.filter(topic => {
+            const matchesSearch = (topic.topicName || "")
+                .toLowerCase().includes(searchText);
+
+            const matchesCategory = !selectedCategory ||
+                topic.category === selectedCategory;
+
+            const matchesStatus = !selectedStatus ||
+                topic.status === selectedStatus;
+
+            return matchesSearch && matchesCategory && matchesStatus;
+        });
+
+        if (filteredTopics.length === 0) {
+            tableMessage.textContent = allTopics.length === 0
+                ? "No learning topics found. Add your first topic above."
+                : "No topics match your search or filters.";
+
+            return;
+        }
+
+        filteredTopics.forEach(topic => {
+            const row = document.createElement("tr");
+
+            const topicCell = document.createElement("td");
+            topicCell.textContent = topic.topicName || "";
+
+            const categoryCell = document.createElement("td");
+            categoryCell.textContent = topic.category || "";
+
+            const statusCell = document.createElement("td");
+            const statusBadge = document.createElement("span");
+            statusBadge.className = "status";
+
+            if (topic.status === "In Progress") {
+                statusBadge.classList.add("in-progress");
+            } else if (topic.status === "Completed") {
+                statusBadge.classList.add("completed");
+            }
+
+            statusBadge.textContent = topic.status || "Not Started";
+            statusCell.appendChild(statusBadge);
+
+            const progressCell = document.createElement("td");
+            const progressTrack = document.createElement("div");
+            progressTrack.className = "progress-track";
+
+            const progressFill = document.createElement("div");
+            progressFill.className = "progress-fill";
+
+            const progress = Math.max(
+                0,
+                Math.min(100, Number(topic.progressPercentage) || 0)
+            );
+
+            progressFill.style.width = progress + "%";
+            progressTrack.appendChild(progressFill);
+
+            const progressText = document.createElement("span");
+            progressText.textContent = progress + "%";
+
+            progressCell.appendChild(progressTrack);
+            progressCell.appendChild(progressText);
+
+            const actionsCell = document.createElement("td");
+            const actions = document.createElement("div");
+            actions.className = "actions";
+
+            const editButton = document.createElement("button");
+            editButton.type = "button";
+            editButton.className = "edit-button";
+            editButton.textContent = "Edit";
+            editButton.addEventListener("click", () => startEdit(topic));
+
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.className = "delete-button";
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener(
+                "click",
+                () => deleteTopic(topic)
+            );
+
+            actions.appendChild(editButton);
+            actions.appendChild(deleteButton);
+            actionsCell.appendChild(actions);
+
+            row.appendChild(topicCell);
+            row.appendChild(categoryCell);
+            row.appendChild(statusCell);
+            row.appendChild(progressCell);
+            row.appendChild(actionsCell);
+
+            topicTable.appendChild(row);
+        });
+    }
+
+    function startEdit(topic) {
+        editingIdInput.value = topic.id;
+        topicNameInput.value = topic.topicName || "";
+        categoryInput.value = topic.category || "";
+        statusInput.value = topic.status || "Not Started";
+        progressInput.value = Number(topic.progressPercentage) || 0;
+
+        document.getElementById("formHeading").textContent = "Edit Learning Topic";
+        saveButton.textContent = "Save Changes";
+        cancelButton.hidden = false;
+
+        showFormMessage(
+            "Editing: " + topic.topicName + ". Update the fields above.",
+            ""
+        );
+
+        topicForm.scrollIntoView({ behavior: "smooth", block: "start" });
+        topicNameInput.focus();
+    }
+
+    function resetForm() {
+        topicForm.reset();
+        editingIdInput.value = "";
+        progressInput.value = 0;
+
+        document.getElementById("formHeading").textContent =
+            "Add a Learning Topic";
+
+        saveButton.textContent = "+ Add Topic";
+        cancelButton.hidden = true;
+        showFormMessage("", "");
+    }
+
+    cancelButton.addEventListener("click", resetForm);
+
+    topicForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const topicName = topicNameInput.value.trim();
+        const category = categoryInput.value;
+        const status = statusInput.value;
+        const progress = getValidProgress(progressInput.value);
+
+        if (!topicName || !category) {
+            showFormMessage("Enter a topic name and choose a category.", "error");
+            return;
+        }
+
+        if (progress === null) {
+            showFormMessage(
+                "Progress must be a whole number from 0 to 100.",
+                "error"
+            );
+            return;
+        }
+
+        const topic = {
+            topicName: topicName,
+            category: category,
+            status: status,
+            progressPercentage: progress
+        };
+
+        const editingId = editingIdInput.value;
+        const isEditing = editingId !== "";
+
+        const url = isEditing
+            ? API_URL + "/" + encodeURIComponent(editingId)
+            : API_URL;
+
+        saveButton.disabled = true;
+        cancelButton.disabled = true;
+
+        showFormMessage(
+            isEditing ? "Updating topic..." : "Saving topic...",
+            ""
+        );
+
+        try {
+            const response = await fetch(url, {
+                method: isEditing ? "PUT" : "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(topic)
+            });
+
+            if (!response.ok) {
+                const details = await response.text();
+                throw new Error(
+                    "HTTP " + response.status + (details ? ": " + details : "")
+                );
+            }
+
+            resetForm();
+
+            showFormMessage(
+                isEditing
+                    ? "Topic updated successfully!"
+                    : "Topic added successfully!",
+                "success"
+            );
+
+            await loadTopics();
+
+        } catch (error) {
+            console.error("Saving topic failed:", error);
+
+            showFormMessage(
+                "Could not save topic. " + error.message,
+                "error"
+            );
+        } finally {
+            saveButton.disabled = false;
+            cancelButton.disabled = false;
+        }
+    });
+
+    async function deleteTopic(topic) {
+        const confirmed = confirm(
+            'Are you sure you want to delete "' +
+            topic.topicName +
+            '"? This action cannot be undone.'
+        );
+
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(
+                API_URL + "/" + encodeURIComponent(topic.id),
+                { method: "DELETE" }
+            );
+
+            if (!response.ok) {
+                const details = await response.text();
+                throw new Error(
+                    "HTTP " + response.status + (details ? ": " + details : "")
+                );
+            }
+
+            if (editingIdInput.value === String(topic.id)) {
+                resetForm();
+            }
+
+            tableMessage.className = "message success";
+            tableMessage.textContent = "Topic deleted successfully.";
+
+            await loadTopics();
+
+        } catch (error) {
+            console.error("Deleting topic failed:", error);
+
+            tableMessage.className = "message error";
+            tableMessage.textContent =
+                "Could not delete topic. " + error.message;
+        }
+    }
+
+    document.getElementById("searchInput").addEventListener(
+        "input",
+        renderTopics
+    );
+
+    document.getElementById("categoryFilter").addEventListener(
+        "change",
+        renderTopics
+    );
+
+    document.getElementById("statusFilter").addEventListener(
+        "change",
+        renderTopics
+    );
+
+    document.getElementById("refreshButton").addEventListener(
+        "click",
+        loadTopics
+    );
+
+    loadTopics();
+</script>
+
+<section id="study-planner" style="margin:30px 0;padding:24px;border:1px solid #ddd;border-radius:12px;">
+  <h2>Daily Study Planner</h2>
+  <p>Plan and track your daily study tasks.</p>
+
+  <form id="taskForm">
+    <label for="taskTitle">Task name</label><br>
+    <input id="taskTitle" type="text"
+           placeholder="Example: Practice Java arrays"
+           required maxlength="200"
+           style="padding:10px;width:90%;margin:8px 0;"><br>
+
+    <label for="taskCategory">Category</label><br>
+    <select id="taskCategory" required
+            style="padding:10px;margin:8px 0;">
+      <option value="Java">Java</option>
+      <option value="DSA">DSA</option>
+      <option value="Placement">Placement</option>
+      <option value="Project">Project</option>
+    </select><br>
+
+    <label for="taskDate">Study date</label><br>
+    <input id="taskDate" type="date" required
+           style="padding:10px;margin:8px 0;"><br>
+
+    <button type="submit" style="padding:10px 18px;">
+      Add Study Task
+    </button>
+  </form>
+
+  <p id="taskMessage" role="status"></p>
+
+  <h3>My Study Tasks</h3>
+  <div id="taskList">Loading tasks...</div>
+</section>
+
+<script>
+const TASK_API = "http://localhost:8080/api/tasks";
+
+const taskDateInput = document.getElementById("taskDate");
+const taskForm = document.getElementById("taskForm");
+const taskList = document.getElementById("taskList");
+const taskMessage = document.getElementById("taskMessage");
+
+taskDateInput.value =
+  new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+    .toISOString().slice(0, 10);
+
+async function loadTasks() {
+  taskList.textContent = "Loading tasks...";
+
+  try {
+    const response = await fetch(TASK_API);
+
+    if (!response.ok) {
+      throw new Error("Could not load tasks.");
+    }
+
+    const tasks = await response.json();
+    taskList.replaceChildren();
+
+    if (tasks.length === 0) {
+      taskList.textContent = "No study tasks yet. Add your first task!";
+      return;
+    }
+
+    tasks.sort((a, b) =>
+      a.taskDate.localeCompare(b.taskDate) || a.id - b.id
+    );
+
+    tasks.forEach(task => {
+      const row = document.createElement("div");
+      row.style.cssText =
+        "padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:8px;";
+
+      const title = document.createElement("strong");
+      title.textContent = task.taskTitle;
+      if (task.completed) title.style.textDecoration = "line-through";
+
+      const details = document.createElement("p");
+      details.textContent =
+        task.category + " | " + task.taskDate + " | " +
+        (task.completed ? "Completed" : "Pending");
+
+      const completeButton = document.createElement("button");
+      completeButton.textContent =
+        task.completed ? "Mark Pending" : "Mark Complete";
+      completeButton.style.marginRight = "8px";
+      completeButton.onclick = () => updateTask(task, !task.completed);
+	  
+	  const editButton = document.createElement("button");
+	  editButton.textContent = "Edit";
+	  editButton.style.marginRight = "8px";
+	  editButton.onclick = () => editTask(task);
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.onclick = () => deleteTask(task);
+
+      row.append(title, details, editButton, completeButton, deleteButton);
+      taskList.appendChild(row);
+    });
+  } catch (error) {
+    taskList.textContent =
+      "Unable to load tasks. Check that the backend is running.";
+  }
+}
+
+taskForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  taskMessage.textContent = "Saving task...";
+
+  const task = {
+    taskTitle: document.getElementById("taskTitle").value.trim(),
+    category: document.getElementById("taskCategory").value,
+    taskDate: taskDateInput.value,
+    completed: false
+  };
+
+  try {
+    const response = await fetch(TASK_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(task)
+    });
+
+    if (!response.ok) {
+      throw new Error("Task could not be saved.");
+    }
+
+    taskForm.reset();
+    taskDateInput.value =
+      new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString().slice(0, 10);
+
+    taskMessage.textContent = "Study task added successfully!";
+    await loadTasks();
+  } catch (error) {
+    taskMessage.textContent =
+      "Could not save task. Check the backend and try again.";
+  }
+});
+
+async function editTask(task) {
+  const newTitle = prompt("Enter task name:", task.taskTitle);
+  if (newTitle === null || !newTitle.trim()) return;
+
+  const newCategory = prompt(
+    "Enter category (Java, DSA, Placement, Project):",
+    task.category
+  );
+  if (newCategory === null || !newCategory.trim()) return;
+
+  const newDate = prompt(
+    "Enter study date (YYYY-MM-DD):",
+    task.taskDate
+  );
+  if (newDate === null || !/^\d{4}-\d{2}-\d{2}$/.test(newDate)) {
+    alert("Please enter the date in YYYY-MM-DD format.");
+    return;
+  }
+
+  try {
+    const response = await fetch(TASK_API + "/" + task.id, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        taskTitle: newTitle.trim(),
+        category: newCategory.trim(),
+        taskDate: newDate,
+        completed: task.completed
+      })
+    });
+
+    if (!response.ok) throw new Error("Update failed.");
+
+    taskMessage.textContent = "Task updated successfully!";
+    await loadTasks();
+    if (typeof loadStudyAnalytics === "function") {
+      await loadStudyAnalytics();
+    }
+  } catch (error) {
+    taskMessage.textContent = "Could not update task.";
+  }
+}
+
+async function updateTask(task, completed) {
+  try {
+    const response = await fetch(TASK_API + "/" + task.id, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        taskTitle: task.taskTitle,
+        category: task.category,
+        taskDate: task.taskDate,
+        completed: completed
+      })
+    });
+
+    if (!response.ok) throw new Error("Update failed.");
+    taskMessage.textContent = "Task updated.";
+    await loadTasks();
+  } catch (error) {
+    taskMessage.textContent = "Could not update task.";
+  }
+}
+
+async function deleteTask(task) {
+  if (!confirm("Delete this study task?")) return;
+
+  try {
+    const response = await fetch(TASK_API + "/" + task.id, {
+      method: "DELETE"
+    });
+
+    if (!response.ok) throw new Error("Delete failed.");
+    taskMessage.textContent = "Task deleted.";
+    await loadTasks();
+  } catch (error) {
+    taskMessage.textContent = "Could not delete task.";
+  }
+}
+
+loadTasks();
+</script>
+
+<section id="study-analytics"
+         style="margin:30px 0;padding:24px;border:1px solid #ddd;border-radius:12px;">
+  <h2>Study Progress Analytics</h2>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;">
+    <div style="padding:18px;border-radius:10px;background:#eaf2ff;">
+      <p>Total Tasks</p>
+      <h2 id="totalTasks">0</h2>
+    </div>
+
+    <div style="padding:18px;border-radius:10px;background:#e8f8ed;">
+      <p>Completed</p>
+      <h2 id="completedTasks">0</h2>
+    </div>
+
+    <div style="padding:18px;border-radius:10px;background:#fff3df;">
+      <p>Pending</p>
+      <h2 id="pendingTasks">0</h2>
+    </div>
+
+    <div style="padding:18px;border-radius:10px;background:#f2eaff;">
+      <p>Completion Rate</p>
+      <h2 id="completionRate">0%</h2>
+    </div>
+  </div>
+
+  <h3>Overall Completion</h3>
+  <div style="height:20px;background:#e5e7eb;border-radius:10px;overflow:hidden;">
+    <div id="analyticsProgress"
+         style="height:100%;width:0%;background:#22a06b;transition:width .3s;">
+    </div>
+  </div>
+  <p id="analyticsMessage">Loading analytics...</p>
+</section>
+
+<script>
+async function loadStudyAnalytics() {
+  const message = document.getElementById("analyticsMessage");
+
+  try {
+    const response = await fetch("http://localhost:8080/api/tasks");
+
+    if (!response.ok) {
+      throw new Error("Could not retrieve tasks.");
+    }
+
+    const tasks = await response.json();
+
+    const total = tasks.length;
+    const completed = tasks.filter(task => task.completed === true).length;
+    const pending = total - completed;
+    const rate = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+    document.getElementById("totalTasks").textContent = total;
+    document.getElementById("completedTasks").textContent = completed;
+    document.getElementById("pendingTasks").textContent = pending;
+    document.getElementById("completionRate").textContent = rate + "%";
+    document.getElementById("analyticsProgress").style.width = rate + "%";
+
+    message.textContent = total === 0
+      ? "Add study tasks to begin tracking your progress."
+      : "You have completed " + completed + " of " + total + " study tasks.";
+  } catch (error) {
+    message.textContent =
+      "Analytics unavailable. Check whether the backend is running.";
+  }
+}
+
+loadStudyAnalytics();
+</script>
+
+<section id="study-calendar"
+         style="margin:30px 0;padding:24px;border:1px solid #ddd;border-radius:12px;">
+  <h2>Study Calendar 📅</h2>
+  <p>Select a date to view your scheduled study tasks.</p>
+
+  <label for="calendarDate">Choose date:</label>
+  <input type="date" id="calendarDate"
+         style="padding:10px;margin:10px;">
+
+  <h3 id="calendarHeading">Tasks for selected date</h3>
+  <div id="calendarTasks">Choose a date to load tasks.</div>
+</section>
+
+<script>
+const calendarDate = document.getElementById("calendarDate");
+const calendarTasks = document.getElementById("calendarTasks");
+const calendarHeading = document.getElementById("calendarHeading");
+
+calendarDate.value =
+  new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+    .toISOString().slice(0, 10);
+
+async function loadCalendarTasks() {
+  const selectedDate = calendarDate.value;
+  calendarHeading.textContent = "Tasks for " + selectedDate;
+  calendarTasks.textContent = "Loading tasks...";
+
+  try {
+    const response = await fetch(
+      "http://localhost:8080/api/tasks?date=" +
+      encodeURIComponent(selectedDate)
+    );
+
+    if (!response.ok) throw new Error("Unable to load tasks.");
+
+    const tasks = await response.json();
+    calendarTasks.replaceChildren();
+
+    if (tasks.length === 0) {
+      calendarTasks.textContent = "No tasks scheduled for this date.";
+      return;
+    }
+
+    tasks.forEach(task => {
+      const item = document.createElement("div");
+      item.style.cssText =
+        "padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;";
+
+      const title = document.createElement("strong");
+      title.textContent = task.taskTitle;
+
+      const details = document.createElement("p");
+      details.textContent =
+        task.category + " — " +
+        (task.completed ? "Completed" : "Pending");
+
+      item.append(title, details);
+      calendarTasks.appendChild(item);
+    });
+  } catch (error) {
+    calendarTasks.textContent =
+      "Could not load calendar tasks. Check the backend connection.";
+  }
+}
+
+calendarDate.addEventListener("change", loadCalendarTasks);
+loadCalendarTasks();
+</script>
+
+<section id="placement-assistant" style="margin:30px 0;padding:24px;border:1px solid #ddd;border-radius:12px;">
+  <h2>AI Placement Assistant 🤖</h2>
+  <p>Build a personalized placement preparation plan.</p>
+
+  <form id="placementForm">
+    <label for="targetRole">Target role</label><br>
+    <select id="targetRole" required style="padding:10px;margin:8px 0 16px;width:100%;max-width:400px;">
+      <option value="Java Developer">Java Developer</option>
+      <option value="Full Stack Developer">Full Stack Developer</option>
+      <option value="Software Engineer">Software Engineer</option>
+    </select>
+    <br>
+
+    <label for="currentSkills">Your current skills</label><br>
+    <input id="currentSkills" type="text" placeholder="Example: Java, SQL, HTML" required
+      style="padding:10px;margin:8px 0 16px;width:100%;max-width:400px;box-sizing:border-box;">
+    <br>
+
+    <label for="dailyHours">Daily study time</label><br>
+    <select id="dailyHours" required style="padding:10px;margin:8px 0 16px;width:100%;max-width:400px;">
+      <option value="1">1 hour</option>
+      <option value="2" selected>2 hours</option>
+      <option value="3">3 hours</option>
+      <option value="4">4 hours</option>
+    </select>
+    <br>
+
+    <button type="submit" style="padding:12px 18px;cursor:pointer;">
+      Generate My Placement Plan
+    </button>
+  </form>
+
+  <div id="placementResult" style="margin-top:20px;"></div>
+</section>
+
+<script>
+document.getElementById("placementForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const role = document.getElementById("targetRole").value;
+  const skills = document.getElementById("currentSkills").value.trim();
+  const hours = Number(document.getElementById("dailyHours").value);
+  const result = document.getElementById("placementResult");
+
+  if (!skills) {
+    result.textContent = "Please enter your current skills.";
+    return;
+  }
+
+  const plan = [
+    {
+      title: "Java and Programming",
+      time: Math.round(hours * 0.30 * 60),
+      task: "Practice Java basics, OOP, strings, arrays and collections."
+    },
+    {
+      title: "DSA Practice",
+      time: Math.round(hours * 0.35 * 60),
+      task: "Solve beginner problems on arrays, two pointers, hashing and searching."
+    },
+    {
+      title: "SQL and Technical Skills",
+      time: Math.round(hours * 0.20 * 60),
+      task: role === "Full Stack Developer"
+        ? "Practice SQL, HTML, CSS, JavaScript and backend fundamentals."
+        : "Practice SQL queries, DBMS concepts and role-related technical questions."
+    },
+    {
+      title: "Interview Preparation",
+      time: Math.round(hours * 0.15 * 60),
+      task: "Review your projects, explain your code aloud and practice interview questions."
+    }
+  ];
+
+  result.replaceChildren();
+
+  const heading = document.createElement("h3");
+  heading.textContent = "Your Placement Preparation Plan";
+  result.appendChild(heading);
+
+  const summary = document.createElement("p");
+  summary.textContent = "Target role: " + role + " | Current skills: " + skills +
+    " | Daily time: " + hours + " hour(s)";
+  result.appendChild(summary);
+
+  plan.forEach(item => {
+    const card = document.createElement("div");
+    card.style.cssText = "padding:14px;margin:10px 0;border:1px solid #ddd;border-radius:8px;";
+
+    const title = document.createElement("h4");
+    title.textContent = item.title;
+
+    const time = document.createElement("p");
+    time.textContent = "Suggested time: " + item.time + " minutes";
+
+    const task = document.createElement("p");
+    task.textContent = item.task;
+
+    card.append(title, time, task);
+    result.appendChild(card);
+  });
+
+  const note = document.createElement("p");
+  note.textContent = "Note: This is a rule-based plan, not a response generated by a real AI model.";
+  result.appendChild(note);
+});
+</script>
+
+<section id="streak-section">
+    <h2>🔥 Study Streak</h2>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <h3>Current Streak</h3>
+            <p><span id="currentStreak">0</span> days</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Longest Streak</h3>
+            <p><span id="longestStreak">0</span> days</p>
+        </div>
+    </div>
+
+    <p id="streakMessage">Start completing tasks to build your streak!</p>
+
+    <button id="refreshStreak" type="button">Refresh Streak</button>
+</section>
+
+<section id="readiness-section" style="margin:30px 0;padding:24px;border:1px solid #ddd;border-radius:12px;">
+  <h2>Placement Readiness Dashboard 📊</h2>
+  <p>Track your preparation using your actual learning topics and study tasks.</p>
+
+  <div id="readinessLoading">Calculating your progress...</div>
+
+  <div id="readinessContent" hidden>
+    <div style="margin:15px 0;">
+      <h3>Learning Progress: <span id="learningScore">0%</span></h3>
+      <progress id="learningBar" value="0" max="100" style="width:100%;height:20px;"></progress>
+    </div>
+
+    <div style="margin:15px 0;">
+      <h3>Study Task Completion: <span id="taskScore">0%</span></h3>
+      <progress id="taskBar" value="0" max="100" style="width:100%;height:20px;"></progress>
+    </div>
+
+    <div style="margin:15px 0;">
+      <h3>Overall Preparation Score: <span id="overallScore">0%</span></h3>
+      <progress id="overallBar" value="0" max="100" style="width:100%;height:24px;"></progress>
+    </div>
+
+    <p id="readinessMessage"></p>
+  </div>
+
+  <button id="refreshReadiness" type="button" style="padding:10px 16px;cursor:pointer;">
+    Refresh Progress
+  </button>
+</section>
+
+<script>
+async function loadPlacementReadiness() {
+  const loading = document.getElementById("readinessLoading");
+  const content = document.getElementById("readinessContent");
+  const message = document.getElementById("readinessMessage");
+
+  loading.textContent = "Calculating your progress...";
+  content.hidden = true;
+
+  try {
+    const [topicResponse, taskResponse] = await Promise.all([
+      fetch("http://localhost:8080/api/topics"),
+      fetch("http://localhost:8080/api/tasks")
+    ]);
+
+    if (!topicResponse.ok || !taskResponse.ok) {
+      throw new Error("Could not load dashboard data.");
+    }
+
+    const topics = await topicResponse.json();
+    const tasks = await taskResponse.json();
+
+    const learningScore = topics.length
+      ? topics.reduce((sum, topic) => sum + Number(topic.progressPercentage || 0), 0) / topics.length
+      : 0;
+
+    const taskScore = tasks.length
+      ? tasks.filter(task => task.completed === true).length / tasks.length * 100
+      : 0;
+
+    const overallScore = (learningScore + taskScore) / 2;
+
+    document.getElementById("learningScore").textContent = Math.round(learningScore) + "%";
+    document.getElementById("learningBar").value = learningScore;
+
+    document.getElementById("taskScore").textContent = Math.round(taskScore) + "%";
+    document.getElementById("taskBar").value = taskScore;
+
+    document.getElementById("overallScore").textContent = Math.round(overallScore) + "%";
+    document.getElementById("overallBar").value = overallScore;
+
+    if (overallScore < 30) {
+      message.textContent = "Start with Java fundamentals and beginner DSA problems. Build a consistent daily routine.";
+    } else if (overallScore < 60) {
+      message.textContent = "Good start! Continue practicing DSA, SQL and your project regularly.";
+    } else if (overallScore < 80) {
+      message.textContent = "Good progress! Focus on interview practice, project quality and revision.";
+    } else {
+      message.textContent = "Strong tracked progress! Continue mock interviews and practice problems.";
+    }
+
+    loading.textContent = "";
+    content.hidden = false;
+  } catch (error) {
+    loading.textContent = "Unable to calculate progress. Check that Spring Boot is running on port 8080.";
+  }
+}
+
+document.getElementById("refreshReadiness")
+  .addEventListener("click", loadPlacementReadiness);
+
+loadPlacementReadiness();
+</script>
+
+
+<script>
+async function loadStudyStreak() {
+    try {
+        const response = await fetch("http://localhost:8080/api/streak");
+
+        if (!response.ok) {
+            throw new Error("Failed to load study streak");
+        }
+
+        const data = await response.json();
+
+        document.getElementById("currentStreak").textContent =
+            data.currentStreak;
+
+        document.getElementById("longestStreak").textContent =
+            data.longestStreak;
+
+        document.getElementById("streakMessage").textContent =
+            data.currentStreak > 0
+                ? "🔥 Great job! Keep your study streak going!"
+                : "Start completing tasks to build your streak!";
+
+    } catch (error) {
+        console.error("Study streak error:", error);
+        document.getElementById("streakMessage").textContent =
+            "Unable to load streak. Check whether the backend is running.";
+    }
+}
+
+document.getElementById("refreshStreak")
+    .addEventListener("click", loadStudyStreak);
+	loadStudyStreak();
+</script>
+
+</body>
+</html>
